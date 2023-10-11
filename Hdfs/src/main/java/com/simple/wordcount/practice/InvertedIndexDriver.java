@@ -1,7 +1,7 @@
 package com.simple.wordcount.practice;
 
-import com.simple.wordcount.invertedindex.invertedIndex.Map;
-import com.simple.wordcount.invertedindex.invertedIndex.Reduce;
+import com.simple.invertedIndex.Map;
+import com.simple.invertedIndex.Reduce;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;

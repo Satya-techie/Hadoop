@@ -1,4 +1,4 @@
-package com.simple.wordcount.invertedindex.invertedIndex;
+package com.simple.invertedIndex;
 
 
 

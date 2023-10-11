@@ -41,6 +41,11 @@
             <artifactId>hadoop-yarn-api</artifactId>
             <version>2.7.3</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.mrunit</groupId>
+            <artifactId>mrunit</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 

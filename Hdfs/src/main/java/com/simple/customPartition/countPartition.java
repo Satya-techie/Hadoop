@@ -1,15 +1,18 @@
-package com.simple.wordcount.invertedindex.invertedIndex;
+package com.simple.customPartition;
+
 
 /**
- * The Main class for MR job to build an inverted index
+ * The Main class for custom Partitioning.
+ * Use the output file of your word count program as the input
+ * to test this class
+ *
  */
 
 
 
-import com.simple.wordcount.practice.IIMapper;
-import com.simple.wordcount.practice.IIReducer;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
@@ -17,7 +20,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class invertedIndex extends Configured implements Tool{
+public class countPartition extends Configured implements Tool{
     @Override
     public int run(String[] args) throws Exception{
 
@@ -28,30 +31,27 @@ public class invertedIndex extends Configured implements Tool{
         }
 
         Job job = Job.getInstance(getConf());
-        job.setJobName("invertedIndex");
-        job.setJarByClass(invertedIndex.class);
+        job.setJobName("customPartition");
+        job.setJarByClass(countPartition.class);
 
-        job.getConfiguration().set("mapreduce.output.textoutputformat.separator", " | ");
-
-        job.setOutputKeyClass(Text.class);
+        job.setOutputKeyClass(IntWritable.class);
         job.setOutputValueClass(Text.class);
 
-        job.setMapperClass(IIMapper.class);
-        //job.setCombinerClass(Reduce.class);
-        job.setReducerClass(IIReducer.class);
+        job.setMapperClass(Map.class);
+        job.setReducerClass(Reduce.class);
+        job.setPartitionerClass(countPartitioner.class);
+        job.setNumReduceTasks(2);
 
         Path inputFilePath = new Path(args[0]);
         Path outputFilePath = new Path(args[1]);
         FileInputFormat.addInputPath(job, inputFilePath);
         FileOutputFormat.setOutputPath(job, outputFilePath);
 
-        FileInputFormat.setInputDirRecursive(job, true);
-
         return job.waitForCompletion(true) ? 0 : 1;
     }
 
     public static void main(String[] args) throws Exception {
-        int exitCode = ToolRunner.run(new invertedIndex(), args);
+        int exitCode = ToolRunner.run(new countPartition(), args);
         System.exit(exitCode);
     }
 }
